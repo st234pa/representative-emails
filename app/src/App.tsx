@@ -54,6 +54,7 @@ export default function App() {
                 emails: result['emails'],
               }))
           );
+          setError('');
         }
       });
   }
