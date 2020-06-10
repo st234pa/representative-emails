@@ -11,6 +11,7 @@ import DismissableAlert from './components/DismissableAlert';
 
 export type OfficialInformation = {
   name: string;
+  office: string;
   emails: string[];
 };
 
@@ -53,11 +54,21 @@ export default function App() {
           setApiError(data['error']['message']);
         } else {
           setApiError('');
-          const results = data['officials']
+          const officesData: any[] = data['offices'];
+          let officialsData: any[] = data['officials'];
+          officesData.forEach((office: any) => {
+            const officialIndices: number[] = office.officialIndices;
+            officialIndices.forEach((officialIndex: number) => {
+              officialsData[officialIndex].office = office.name;
+            });
+          });
+
+          const results = officialsData
             .filter((result: any) => 'emails' in result)
             .map((result: any) => ({
               name: result['name'],
               emails: result['emails'],
+              office: result['office'],
             }));
           if (results.length === 0) {
             setShowAlert(true);

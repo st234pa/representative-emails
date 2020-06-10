@@ -16,7 +16,8 @@ export default function Official(props: OfficialProps) {
     const emails: string = emailStringFromArray(official.emails);
     return (
       <span>
-        {official.name}: <a href={'mailto:' + emails}>{emails}</a>
+        {official.name} ({official.office}):{' '}
+        <a href={'mailto:' + emails}>{emails}</a>
       </span>
     );
   }
