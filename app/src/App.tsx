@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import OfficialsList from './components/OfficialsList';
 import CopyButton from './components/CopyButton';
+import DismissableAlert from './components/DismissableAlert';
 
 export type OfficialInformation = {
   name: string;
@@ -21,6 +22,10 @@ export type OfficialCallback = {
   (official: OfficialInformation): void;
 };
 
+export type DismissAlertCallback = {
+  (): void;
+};
+
 export function emailStringFromArray(emails: string[]) {
   let emailString = '';
   for (let i in emails) {
@@ -31,11 +36,12 @@ export function emailStringFromArray(emails: string[]) {
 }
 
 export default function App() {
-  const [error, setError] = React.useState<string>('');
+  const [apiError, setApiError] = React.useState<string>('');
   const [officials, setOfficials] = React.useState<OfficialInformation[]>([]);
   const [emailsToCopy, setEmailsToCopy] = React.useState<
     Map<OfficialInformation, boolean>
   >(new Map<OfficialInformation, boolean>());
+  const [showAlert, setShowAlert] = React.useState<boolean>(false);
 
   function handleAddressLookup(address: string) {
     fetch(
@@ -44,19 +50,26 @@ export default function App() {
       .then((response) => response.json())
       .then((data) => {
         if ('error' in data) {
-          setError(data['error']['message']);
+          setApiError(data['error']['message']);
         } else {
-          setOfficials(
-            data['officials']
-              .filter((result: any) => 'emails' in result)
-              .map((result: any) => ({
-                name: result['name'],
-                emails: result['emails'],
-              }))
-          );
-          setError('');
+          setApiError('');
+          const results = data['officials']
+            .filter((result: any) => 'emails' in result)
+            .map((result: any) => ({
+              name: result['name'],
+              emails: result['emails'],
+            }));
+          if (results.length === 0) {
+            setShowAlert(true);
+          } else {
+            setOfficials(results);
+          }
         }
       });
+  }
+
+  function handleDismissAlert() {
+    setShowAlert(false);
   }
 
   function handleClick(official: OfficialInformation) {
@@ -100,10 +113,21 @@ export default function App() {
         </Row>
         <Row className="justify-content-md-center">
           <Col lg={8}>
-            {AddressLookup({ handleSubmit: handleAddressLookup, error: error })}
+            {AddressLookup({
+              handleSubmit: handleAddressLookup,
+              handleDismissAlert: handleDismissAlert,
+              error: apiError,
+            })}
           </Col>
         </Row>
-
+        <Row className="justify-content-md-center mb-3">
+          <Col lg={8}>
+            {DismissableAlert({
+              show: showAlert,
+              handleClose: handleDismissAlert,
+            })}
+          </Col>
+        </Row>
         <Row className="justify-content-md-center mb-3">
           <Col lg={8}>
             {officials.length > 0 &&

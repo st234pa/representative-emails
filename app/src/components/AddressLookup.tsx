@@ -2,11 +2,12 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import { AddressLookupCallback } from '../App';
+import { AddressLookupCallback, DismissAlertCallback } from '../App';
 import Col from 'react-bootstrap/Col';
 
 type AddressLookupProps = {
   handleSubmit: AddressLookupCallback;
+  handleDismissAlert: DismissAlertCallback;
   error: string;
 };
 
@@ -15,6 +16,14 @@ export default function AddressLookup(props: AddressLookupProps) {
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setInput(evt.target.value);
+    props.handleDismissAlert();
+  };
+
+  const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+      props.handleSubmit(input);
+    }
   };
 
   return (
@@ -27,6 +36,7 @@ export default function AddressLookup(props: AddressLookupProps) {
             aria-label="Address"
             aria-describedby="basic-addon2"
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
           ></FormControl>
           {props.error && (
             <Form.Control.Feedback type="invalid">
