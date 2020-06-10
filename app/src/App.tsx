@@ -73,6 +73,7 @@ export default function App() {
           } else {
             results = results.sort(sortByName);
             setOfficials(results);
+            updateEmailsToCopy(true, results);
           }
         }
       });
@@ -96,16 +97,27 @@ export default function App() {
         newOfficials.add(newOfficial);
       }
     });
-    const newOfficialsArray = Array.from(newOfficials);
+    const newOfficialsArray = Array.from(newOfficials).sort(sortByName);
     const newCopyAll = newOfficialsArray.every(
       (official: OfficialInformation) => official.checked
     );
-    setOfficials(newOfficialsArray.sort(sortByName));
+    setOfficials(newOfficialsArray);
     setCopyAll(newCopyAll);
+    updateEmailsToCopy(copyAll, newOfficialsArray);
+  }
+
+  function handleCopy() {
+    navigator.clipboard.writeText(emailsToCopy);
+  }
+
+  function updateEmailsToCopy(
+    copyAll: boolean,
+    officials: OfficialInformation[]
+  ) {
     let emails = new Set<string>();
     let emailString: string = '';
-    newOfficials.forEach((value: OfficialInformation) => {
-      if (newCopyAll || value.checked) {
+    officials.forEach((value: OfficialInformation) => {
+      if (copyAll || value.checked) {
         value.emails.forEach(emails.add, emails);
       }
     });
@@ -113,10 +125,6 @@ export default function App() {
       emailString += email + ',';
     });
     setEmailsToCopy(emailString);
-  }
-
-  function handleCopy() {
-    navigator.clipboard.writeText(emailsToCopy);
   }
 
   return (
