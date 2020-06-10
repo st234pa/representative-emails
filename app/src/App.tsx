@@ -106,7 +106,7 @@ export default function App() {
             <p className="mb-0 text-center">
               Built using the Google Civic Information API.
             </p>
-            <p className="mb-0 text-center">
+            <p className="mb-3 text-center">
               <small>&mdash; Stephanie Yoon</small>
             </p>
           </Col>
