@@ -113,6 +113,19 @@ export default function App() {
         </Row>
         <Row className="justify-content-md-center">
           <Col lg={8}>
+            <p className="text-center">
+              <a
+                href="https://syoon123.github.io/etemplate"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Need to make an email template?
+              </a>
+            </p>
+          </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+          <Col lg={8}>
             {AddressLookup({
               handleSubmit: handleAddressLookup,
               handleDismissAlert: handleDismissAlert,
