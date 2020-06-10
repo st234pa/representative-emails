@@ -29,15 +29,6 @@ export type DismissAlertCallback = {
   (): void;
 };
 
-export function emailStringFromArray(emails: string[]) {
-  let emailString = '';
-  for (let i in emails) {
-    emailString += emails[i] + ', ';
-  }
-  emailString = emailString.substring(0, emailString.length - 2);
-  return emailString;
-}
-
 export default function App() {
   const [apiError, setApiError] = React.useState<string>('');
   const [officials, setOfficials] = React.useState<OfficialInformation[]>([]);

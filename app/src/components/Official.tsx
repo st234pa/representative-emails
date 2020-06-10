@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  OfficialInformation,
-  OfficialCallback,
-  emailStringFromArray,
-} from '../App';
+import { OfficialInformation, OfficialCallback } from '../App';
 import Form from 'react-bootstrap/Form';
 
 type OfficialProps = {
@@ -12,8 +8,16 @@ type OfficialProps = {
 };
 
 export default function Official(props: OfficialProps) {
+  function emailString(emails: string[]) {
+    let emailString = '';
+    for (let i in emails) {
+      emailString += emails[i] + ', ';
+    }
+    emailString = emailString.substring(0, emailString.length - 2);
+    return emailString;
+  }
   function officialString(official: OfficialInformation) {
-    const emails: string = emailStringFromArray(official.emails);
+    const emails: string = emailString(official.emails);
     return (
       <span>
         {official.name} ({official.office}):{' '}
