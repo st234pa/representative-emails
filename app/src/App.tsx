@@ -106,10 +106,6 @@ export default function App() {
     updateEmailsToCopy(copyAll, newOfficialsArray);
   }
 
-  function handleCopy() {
-    navigator.clipboard.writeText(emailsToCopy);
-  }
-
   function updateEmailsToCopy(
     copyAll: boolean,
     officials: OfficialInformation[]
@@ -184,7 +180,6 @@ export default function App() {
               CopyButton({
                 emailString: emailsToCopy,
                 copyAll: copyAll,
-                handleClick: handleCopy,
               })}
           </Col>
         </Row>

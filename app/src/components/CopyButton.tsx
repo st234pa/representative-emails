@@ -5,12 +5,14 @@ import { EmptyCallback } from '../App';
 type CopyButtonProps = {
   emailString: string;
   copyAll: boolean;
-  handleClick: EmptyCallback;
 };
 
 export default function CopyButton(props: CopyButtonProps) {
+  function handleCopy() {
+    navigator.clipboard.writeText(props.emailString);
+  }
   return (
-    <Button variant="success" block onClick={props.handleClick}>
+    <Button variant="success" block onClick={handleCopy}>
       {props.copyAll ? 'Copy All' : 'Copy Selected'}
     </Button>
   );
