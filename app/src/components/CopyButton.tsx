@@ -9,9 +9,6 @@ type CopyButtonProps = {
 };
 
 export default function CopyButton(props: CopyButtonProps) {
-  function handleClick() {
-    navigator.clipboard.writeText(props.emailString);
-  }
   return (
     <Button variant="success" block onClick={props.handleClick}>
       {props.copyAll ? 'Copy All' : 'Copy Selected'}

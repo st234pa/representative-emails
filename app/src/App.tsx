@@ -116,7 +116,7 @@ export default function App() {
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(props.emailString);
+    navigator.clipboard.writeText(emailsToCopy);
   }
 
   return (
