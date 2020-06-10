@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 import { OfficialInformation, OfficialCallback } from '../App';
 import Official from './Official';
 type OfficialsListProps = {
@@ -8,12 +9,10 @@ type OfficialsListProps = {
 
 export default function OfficialsList(props: OfficialsListProps) {
   return (
-    <ul>
-      {props.officials.map((official: OfficialInformation) => (
-        <li key={official.name}>
-          {Official({ official: official, handleClick: props.handleClick })}
-        </li>
-      ))}
-    </ul>
+    <Form>
+      {props.officials.map((official: OfficialInformation) =>
+        Official({ official: official, handleClick: props.handleClick })
+      )}
+    </Form>
   );
 }

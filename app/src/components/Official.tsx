@@ -25,12 +25,11 @@ export default function Official(props: OfficialProps) {
     props.handleClick(props.official);
   }
   return (
-    <Form.Group controlId="formBasicCheckbox">
-      <Form.Check
-        type="checkbox"
-        label={officialString(props.official)}
-        onClick={handleClick}
-      />
-    </Form.Group>
+    <Form.Check
+      type="checkbox"
+      label={officialString(props.official)}
+      className="mb-1"
+      onClick={handleClick}
+    />
   );
 }
