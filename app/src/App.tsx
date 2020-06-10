@@ -106,14 +106,14 @@ export default function App() {
             <p className="mb-0 text-center">
               Built using the Google Civic Information API.
             </p>
-            <p className="text-center">
+            <p className="mb-0 text-center">
               <small>&mdash; Stephanie Yoon</small>
             </p>
           </Col>
         </Row>
         <Row className="justify-content-md-center">
           <Col lg={8}>
-            <p className="text-center">
+            <p className="text-center mb-3">
               <a
                 href="https://syoon123.github.io/etemplate"
                 target="_blank"
