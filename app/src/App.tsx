@@ -97,19 +97,15 @@ export default function App() {
       }
     });
     const newOfficialsArray = Array.from(newOfficials);
-    updateEmailsToCopy();
     setOfficials(newOfficialsArray.sort(sortByName));
     setCopyAll(
       newOfficialsArray.every(
         (official: OfficialInformation) => official.checked
       )
     );
-  }
-
-  function updateEmailsToCopy() {
     let emails = new Set<string>();
     let emailString: string = '';
-    officials.forEach((value: OfficialInformation) => {
+    newOfficials.forEach((value: OfficialInformation) => {
       if (copyAll || value.checked) {
         value.emails.forEach(emails.add, emails);
       }
