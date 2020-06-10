@@ -8,11 +8,13 @@ import Col from 'react-bootstrap/Col';
 import OfficialsList from './components/OfficialsList';
 import CopyButton from './components/CopyButton';
 import DismissableAlert from './components/DismissableAlert';
+import { isEqual } from 'lodash';
 
 export type OfficialInformation = {
   name: string;
   office: string;
   emails: string[];
+  checked: boolean;
 };
 
 export type AddressLookupCallback = {
@@ -39,10 +41,15 @@ export function emailStringFromArray(emails: string[]) {
 export default function App() {
   const [apiError, setApiError] = React.useState<string>('');
   const [officials, setOfficials] = React.useState<OfficialInformation[]>([]);
-  const [emailsToCopy, setEmailsToCopy] = React.useState<
-    Map<OfficialInformation, boolean>
-  >(new Map<OfficialInformation, boolean>());
+  const [copyAll, setCopyAll] = React.useState<boolean>(true);
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
+  const [emailsToCopy, setEmailsToCopy] = React.useState<string>('');
+
+  function sortByName(a: any, b: any) {
+    const a_official = a as OfficialInformation;
+    const b_official = b as OfficialInformation;
+    return a_official.name.localeCompare(b_official.name);
+  }
 
   function handleAddressLookup(address: string) {
     fetch(
@@ -62,17 +69,18 @@ export default function App() {
               officialsData[officialIndex].office = office.name;
             });
           });
-
-          const results = officialsData
+          let results = officialsData
             .filter((result: any) => 'emails' in result)
             .map((result: any) => ({
               name: result['name'],
               emails: result['emails'],
               office: result['office'],
+              checked: true,
             }));
           if (results.length === 0) {
             setShowAlert(true);
           } else {
+            results = results.sort(sortByName);
             setOfficials(results);
           }
         }
@@ -84,21 +92,41 @@ export default function App() {
   }
 
   function handleClick(official: OfficialInformation) {
-    const isSelected = !emailsToCopy.get(official);
-    let newEmailsToCopy = new Map<OfficialInformation, boolean>();
-    emailsToCopy.forEach((value: boolean, key: OfficialInformation) => {
-      newEmailsToCopy.set(key, value);
+    let newOfficials = new Set<OfficialInformation>(officials);
+    officials.forEach((value: OfficialInformation) => {
+      if (isEqual(official, value)) {
+        newOfficials.delete(value);
+        const newOfficial = {
+          name: official.name,
+          office: official.office,
+          emails: official.emails,
+          checked: !official.checked,
+        };
+        newOfficials.add(newOfficial);
+      }
     });
-    newEmailsToCopy.set(official, isSelected);
-    setEmailsToCopy(newEmailsToCopy);
+    const newOfficialsArray = Array.from(newOfficials);
+    updateEmailsToCopy();
+    setOfficials(newOfficialsArray.sort(sortByName));
+    setCopyAll(
+      newOfficialsArray.every(
+        (official: OfficialInformation) => official.checked
+      )
+    );
   }
 
-  function emailStringFromMap() {
+  function updateEmailsToCopy() {
+    let emails = new Set<string>();
     let emailString: string = '';
-    emailsToCopy.forEach((value: boolean, key: OfficialInformation) => {
-      emailString += value ? emailStringFromArray(key.emails) + ', ' : '';
+    officials.forEach((value: OfficialInformation) => {
+      if (copyAll || value.checked) {
+        value.emails.forEach(emails.add, emails);
+      }
     });
-    return emailString;
+    emails.forEach((email: string) => {
+      emailString += email + ',';
+    });
+    setEmailsToCopy(emailString);
   }
 
   return (
@@ -156,8 +184,8 @@ export default function App() {
           <Col lg={8}>
             {officials.length > 0 &&
               CopyButton({
-                emailString: emailStringFromMap(),
-                officials: officials,
+                emailString: emailsToCopy,
+                copyAll: copyAll,
               })}
           </Col>
         </Row>

@@ -29,7 +29,9 @@ export default function Official(props: OfficialProps) {
       type="checkbox"
       label={officialString(props.official)}
       className="mb-1"
-      onClick={handleClick}
+      onChange={handleClick}
+      key={props.official.name}
+      checked={props.official.checked}
     />
   );
 }

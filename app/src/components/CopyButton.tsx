@@ -1,27 +1,18 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { OfficialInformation, emailStringFromArray } from '../App';
 
 type CopyButtonProps = {
   emailString: string;
-  officials: OfficialInformation[];
+  copyAll: boolean;
 };
 
 export default function CopyButton(props: CopyButtonProps) {
   function handleClick() {
-    let stringToCopy: string = '';
-    if (props.emailString.length > 0) {
-      stringToCopy = props.emailString;
-    } else {
-      props.officials.forEach((official: OfficialInformation) => {
-        stringToCopy += emailStringFromArray(official.emails) + ', ';
-      });
-    }
-    navigator.clipboard.writeText(stringToCopy);
+    navigator.clipboard.writeText(props.emailString);
   }
   return (
     <Button variant="success" block onClick={handleClick}>
-      {props.emailString.length > 0 ? 'Copy Selected' : 'Copy All'}
+      {props.copyAll ? 'Copy All' : 'Copy Selected'}
     </Button>
   );
 }
