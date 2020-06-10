@@ -25,7 +25,7 @@ export type OfficialCallback = {
   (official: OfficialInformation): void;
 };
 
-export type DismissAlertCallback = {
+export type EmptyCallback = {
   (): void;
 };
 
@@ -115,6 +115,10 @@ export default function App() {
     setEmailsToCopy(emailString);
   }
 
+  function handleCopy() {
+    navigator.clipboard.writeText(props.emailString);
+  }
+
   return (
     <div className="App">
       <Container>
@@ -172,6 +176,7 @@ export default function App() {
               CopyButton({
                 emailString: emailsToCopy,
                 copyAll: copyAll,
+                handleClick: handleCopy,
               })}
           </Col>
         </Row>

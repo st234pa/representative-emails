@@ -1,10 +1,10 @@
 import React from 'react';
 import Alert from 'react-bootstrap/Alert';
-import { DismissAlertCallback } from '../App';
+import { EmptyCallback } from '../App';
 
 type DismissableAlertProps = {
   show: boolean;
-  handleClose: DismissAlertCallback;
+  handleClose: EmptyCallback;
 };
 
 export default function DismissableAlert(props: DismissableAlertProps) {
